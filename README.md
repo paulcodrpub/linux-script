@@ -2,7 +2,9 @@
 Script for preparing a brand new CentOS 6 or 7 instance with user, ssh key, rpms, and other configs.
 
 # Summary of changes made by the shell script.
-* All users including root will get ~/.vimrc with following. It adds commonly used settings I have in vim editor.
+* func_dns: update /etc/resolv.conf
+* func_log: creates log file to record changes. All changes by this shell script will be logged in /root/logs/yyyy-mm-dd-UTC.log for troubleshooting.
+* func_skel_vim: updates /etc/skel/.vimrc with following. This sets all newly added user accounts to get ~/.vimrc with following. It adds commonly used settings I have in vim editor.
 ```
 filetype plugin indent on
 " show existing tab with 4 spaces width
@@ -14,18 +16,24 @@ set expandtab
 
 set paste
 ```
-* All changes will be logged in /root/logs/yyyy-dd-mm-hh.log for troubleshooting.
-* System time will be set to UTC.
-* Customize shell prompt.
-* Shell prompt for root is colored green.
-* Give 'wheel' group sudo privilege.
-* Add username that I always use on my machines.
-* Set up my main Mac's public ssh key on the CentOS server. This allows me to ssh log into all my servers without having to set up the SSH key manually.
-* Turn off selinux.
-* Set up Ansible client, including installing rpm, creating user 'ansible', set up ssh public key, grant sudo privilege to 'ansible' user.
-* Add user 'jenkins' which allows deploy builds by remote Jenskins server to deploy files.
-* Create backup group and add users to it.
-* eth1 is not brought up in CentOS until after first OS reboot. So eth1 will be activated, which will allow installing rpms.
-* Stop/disable NetworkManager service on CentOS 7.
-* Populate /etc/motd with basic info, such as hostname, date installed.
+* func_root_vim: /root/.vimrc is created for root, with same config text added to /etc/skel/.vimrc
+* func_utc: system time will be set to UTC.
+* func_prompt: customize shell prompt. Both root and regular users can see custom shell prompt. Shell prompt for root will be colored differently.
+* func_rpms: install rpms for commonly used software, such as curl, vim, etc.
+* func_adduser: create user, with username of your choice. Add to wheel group for sudo privilege.
+* func_sudoers: give 'wheel' group sudo privilege without requiring password.
+* func_selinux_off: disable selinux
+* func_ansible: install Ansible client. Add 'ansible' user account and add to wheel group.
+* func_jenkins: create user 'jenkins' for Jenkins server and add to wheel group.
+* func_backupadmin: create user group for backup jobs.
+* func_ifup: bring eth1 up.
+* func_network_manager: stop/disable NetworkManager in CentOS 7
+* func_motd: updatet /etc/motd
 
+
+# First run of newcentos-6-7.sh
+Use non-production CentOS to make sure it works with your environment.
+
+The script calls the functions at the end of the script. I disabled functions that add a user account or install Ansible client or set up for Jenskins build jobs. The functions that are not commented out because they can be executed without requiring any modifications.
+
+Scp or rsync newcentos-6-7.sh to a newly provisioned CentOS 6 or 7 server execute it on the server.
