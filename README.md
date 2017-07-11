@@ -1,5 +1,5 @@
 # Intro
-Script for preparing a brand new CentOS 6 or 7 instance with user, ssh key, rpms, and other configs.
+Script for preparing a brand new CentOS 6 or 7 instance with user with ssh key, Ansible client, rpms, and other configs.
 
 # Summary of changes made by the shell script.
 * func_dns: update /etc/resolv.conf
@@ -36,4 +36,4 @@ Use non-production CentOS to make sure it works with your environment.
 
 The script calls the functions at the end of the script. I disabled functions that add a user account or install Ansible client or set up for Jenskins build jobs. The functions that are not commented out because they can be executed without requiring any modifications.
 
-Scp or rsync newcentos-6-7.sh to a newly provisioned CentOS 6 or 7 server execute it on the server.
+Scp or rsync newcentos-6-7.sh to a newly provisioned CentOS 6 or 7 server, set permission, and execute it on the server.
